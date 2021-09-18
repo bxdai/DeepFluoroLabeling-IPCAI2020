@@ -331,7 +331,7 @@ def get_orig_img_shape(h5_file_path, pat_ind):
 def get_num_lands_from_dataset(h5_file_path):
     f = h5.File(h5_file_path, 'r')
     
-    num_lands = int(f['land-names/num-lands'].value)
+    num_lands = int(f['land-names/num-lands'][()])
 
     f.close()
 
@@ -340,12 +340,12 @@ def get_num_lands_from_dataset(h5_file_path):
 def get_land_names_from_dataset(h5_file_path):
     f = h5.File(h5_file_path, 'r')
     
-    num_lands = int(f['land-names/num-lands'].value)
+    num_lands = int(f['land-names/num-lands'][()])
 
     land_names = []
 
     for l in range(num_lands):
-        s = f['land-names/land-{:02d}'.format(l)].value
+        s = f['land-names/land-{:02d}'.format(l)][()]
         if (type(s) is bytes) or (type(s) is np.bytes_):
             s = s.decode()
         assert(type(s) is str)
