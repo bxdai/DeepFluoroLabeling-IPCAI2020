@@ -45,29 +45,31 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    ds_path = args.ds_path
+    # python overlay_est_ann.py ipcai_2020_ds_8x.h5 spec_1_test.h5 nn-segs 1 3 spec_1_est_ann_proj_3.png --lands --no-gt-lands --lands-csv spec_1_lands.csv
     
-    seg_file_path = args.seg_file
-    seg_g_path    = args.seg_group
+    ds_path = args.ds_path # ipcai_2020_ds_8x.h5
+    
+    seg_file_path = args.seg_file # spec_1_test.h5
+    seg_g_path    = args.seg_group#  nn-segs
 
-    out_img_path = args.out_overlay
+    out_img_path = args.out_overlay# spec_1_est_ann_proj_3.png
 
-    pat_ind = args.pat_ind
+    pat_ind = args.pat_ind # 1
 
-    proj = args.proj_ind
+    proj = args.proj_ind # 3
 
-    overlay_lands = args.lands
+    overlay_lands = args.lands #True
 
-    no_gt_lands = args.no_gt_lands
+    no_gt_lands = args.no_gt_lands #True
 
-    no_seg = args.no_seg
+    no_seg = args.no_seg #False
 
-    num_seg_classes = args.num_classes
+    num_seg_classes = args.num_classes #7
 
     est_lands = { }
 
     if overlay_lands:
-        est_lands_csv_path = args.lands_csv
+        est_lands_csv_path = args.lands_csv # spec_1_lands.csv
         csv_lines = open(est_lands_csv_path, 'r').readlines()[1:]
         
         for csv_line in csv_lines:
@@ -91,8 +93,8 @@ if __name__ == '__main__':
     img_max = img.max()
     img = (img - img_min) / (img_max - img_min)
 
-    pil = TF.to_pil_image(img)
-    pil = pil.convert('RGB')
+    pil = TF.to_pil_image(img)#tensor->PIL Image
+    pil = pil.convert('RGB')#gray->rgb
 
     img = TF.to_tensor(pil)
 
@@ -126,15 +128,17 @@ if __name__ == '__main__':
     if overlay_lands:
         pil = TF.to_pil_image(img)
         
-        draw = ImageDraw.Draw(pil)
+        draw = ImageDraw.Draw(pil)#2d 图像的绘制句柄，可以在存在的图上画线等等
 
         def get_box(x, box_radius=2):
             return [(x[0] - box_radius, x[1] - box_radius),
                     (x[0] + box_radius, x[1] + box_radius)]
 
+        #绘制椭圆
         def draw_gt_land(draw_obj, x):
             draw_obj.ellipse(get_box(x), fill='yellow')
         
+        #绘制十指交叉线
         def draw_est_land(draw_obj, x):
             r = 6
             color_str = 'yellow'

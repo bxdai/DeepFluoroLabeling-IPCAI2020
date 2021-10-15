@@ -38,16 +38,18 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    heat_file_path = args.heat_file_path
-    heats_group_path = args.heats_group_path
+    #python est_lands_csv.py spec_1_test.h5 nn-heats --use-seg nn-segs --pat 1 --out spec_1_lands.csv
 
-    out_csv_path = args.out
+    heat_file_path = args.heat_file_path #spec_1_test.h5
+    heats_group_path = args.heats_group_path #nn-heats
 
-    pat_ind = args.pat
+    out_csv_path = args.out # spec_1_lands.csv
+
+    pat_ind = args.pat # 1
     
-    no_csv_hdr = args.no_hdr
+    no_csv_hdr = args.no_hdr # None
 
-    seg_ds_path = args.use_seg
+    seg_ds_path = args.use_seg # nn-segs
    
     land_names = get_land_names_from_dataset(heat_file_path)
 
@@ -104,8 +106,9 @@ if __name__ == '__main__':
                     max_ind = np.unravel_index(torch.argmax(cur_heat).item(), cur_heat.shape)
                 else:
                     tmp_heat = cur_heat.clone().detach()
-                    tmp_heat[segs[i,:,:] != seg_label_to_use] = -math.inf
-                    
+                    tmp_heat[segs[i,:,:] != seg_label_to_use] = -math.inf#浮点负无穷大
+
+                    #获取最大值对应的坐标 
                     max_ind = np.unravel_index(torch.argmax(tmp_heat).item(), cur_heat.shape)
                     if tmp_heat[max_ind[0], max_ind[1]] == -math.inf:
                         max_ind = None
