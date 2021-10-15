@@ -177,14 +177,16 @@ class RandomDataAugDataSet(torch.utils.data.Dataset):
                 rot_ang = random.uniform(-5, 5)
                 trans_x = rand_trans[0]
                 trans_y = rand_trans[1]
-                shear   = random.uniform(-2, 2)
+                shear_x   = random.uniform(-2, 2)
+                shear_y   = random.uniform(-2, 2)
+                shear   = [shear_x,shear_x]
                 
                 scale_factor = random.uniform(0.9, 1.1)
 
                 if self.print_aug_info:
                     print('Rot: {:.2f}'.format(rot_ang))
                     print('Trans X: {:.2f} , Trans Y: {:.2f}'.format(trans_x, trans_y))
-                    print('Shear: {:.2f}'.format(shear))
+                    print('Shear X: {:.2f},  Shaer Y: {:.2f}'.format(shear_x,shear_y))
                     print('Scale: {:.2f}'.format(scale_factor))
 
                 p = TF.to_tensor(TF.affine(TF.to_pil_image(p),
